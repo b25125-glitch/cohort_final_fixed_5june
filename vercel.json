@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/cohort.js": { "maxDuration": 300 },
+    "api/future.js": { "maxDuration": 300 }
+  }
+}

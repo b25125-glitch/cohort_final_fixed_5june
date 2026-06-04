@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cohort Matcher - Himalaya Face Care</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F2EDE3;--cream-dark:#E8E0D0;--green-dark:#1E4D30;--green-mid:#2D6A45;--green-light:#4A8C5C;--orange:#D4541A;--text:#1A2E1E;--text-light:#4A5E4E;--border:rgba(30,77,48,0.15)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh}
+header{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--border);background:var(--cream)}
+.logo-text{font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:400;letter-spacing:.25em;color:var(--green-dark);text-transform:uppercase}
+.logo-sub{font-size:9px;letter-spacing:.3em;color:var(--text-light);font-weight:300;margin-top:1px}
+.header-badge{font-size:10px;letter-spacing:.2em;color:var(--text-light);text-transform:uppercase;border:1px solid var(--border);padding:5px 12px;border-radius:20px}
+.hero{padding:60px 40px 40px;max-width:760px;margin:0 auto}
+.hero-label{font-size:10px;letter-spacing:.3em;color:var(--orange);text-transform:uppercase;margin-bottom:16px;font-weight:500}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;line-height:1.15;color:var(--green-dark);margin-bottom:14px}
+.hero h1 em{font-style:italic;color:var(--green-mid)}
+.hero p{font-size:13px;color:var(--text-light);line-height:1.7;font-weight:300;max-width:500px}
+.input-section{max-width:760px;margin:0 auto;padding:0 40px 40px}
+.input-wrapper{border:1.5px solid var(--green-dark);border-radius:4px;background:white;overflow:hidden;transition:box-shadow .2s}
+.input-wrapper:focus-within{box-shadow:0 0 0 3px rgba(30,77,48,.08)}
+.input-label{padding:14px 18px 0;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--green-light);font-weight:500}
+textarea{width:100%;border:none;outline:none;resize:none;padding:8px 18px 14px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:transparent;font-weight:300;min-height:90px}
+textarea::placeholder{color:#A8B5AC}
+.input-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--cream-dark);background:#FAFAF8}
+.input-hint{font-size:11px;color:var(--text-light);font-weight:300}
+.submit-btn{display:flex;align-items:center;gap:8px;background:var(--green-dark);color:white;border:none;padding:9px 20px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:.08em;cursor:pointer;transition:background .2s}
+.submit-btn:hover{background:var(--green-mid)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.examples{max-width:760px;margin:0 auto;padding:0 40px 48px}
+.examples-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;font-weight:500}
+.example-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;color:var(--text-light);cursor:pointer;transition:all .15s;font-weight:300;background:white}
+.chip:hover{border-color:var(--green-mid);color:var(--green-dark);background:rgba(45,106,69,.04)}
+.loading{display:none;max-width:760px;margin:0 auto;padding:0 40px 40px;align-items:center;gap:14px}
+.loading.visible{display:flex}
+.loading-dots{display:flex;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green-mid);animation:pulse 1.2s infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+.loading-text{font-size:12px;color:var(--text-light);font-weight:300;font-style:italic}
+.error-box{display:none;max-width:760px;margin:0 auto;padding:0 40px 40px}
+.error-box.visible{display:block}
+.error-inner{background:#FFF5F0;border:1px solid rgba(212,84,26,.2);border-radius:4px;padding:16px 20px;font-size:12px;color:var(--orange);line-height:1.6}
+.results{display:none;max-width:760px;margin:0 auto;padding:0 40px 60px}
+.results.visible{display:block}
+.results-header{margin-bottom:24px}
+.results-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--orange);font-weight:500;margin-bottom:6px}
+.results-product{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--green-dark);font-style:italic;line-height:1.4}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.cards{grid-template-columns:1fr}header{padding:16px 20px}.hero,.input-section,.examples,.results,.loading,.error-box{padding-left:20px;padding-right:20px}.hero h1{font-size:32px}}
+.card{border-radius:4px;padding:24px}
+.card-primary{background:var(--green-dark);color:white}
+.card-secondary{background:white;border:1.5px solid var(--border);color:var(--text)}
+.card-rank{font-size:9px;letter-spacing:.3em;text-transform:uppercase;opacity:.6;margin-bottom:12px;font-weight:500}
+.card-primary .card-rank{color:rgba(255,255,255,.7)}
+.card-secondary .card-rank{color:var(--text-light)}
+.card-cohort-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;line-height:1.2;margin-bottom:4px}
+.card-primary .card-cohort-name{color:white}
+.card-secondary .card-cohort-name{color:var(--green-dark)}
+.card-sec-age{font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;font-weight:500;opacity:.7}
+.card-primary .card-sec-age{color:rgba(255,255,255,.7)}
+.card-secondary .card-sec-age{color:var(--text-light)}
+.card-tam{font-size:10px;margin-bottom:18px;font-weight:400;opacity:.6}
+.card-primary .card-tam{color:rgba(255,255,255,.8)}
+.card-secondary .card-tam{color:var(--text-light)}
+.card-divider{height:1px;margin-bottom:16px}
+.card-primary .card-divider{background:rgba(255,255,255,.15)}
+.card-secondary .card-divider{background:var(--cream-dark)}
+.reasons-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:10px;opacity:.6}
+.reasons-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.reasons-list li{font-size:12px;line-height:1.55;font-weight:300;display:flex;gap:8px;align-items:flex-start}
+.card-primary .reasons-list li{color:rgba(255,255,255,.88)}
+.card-secondary .reasons-list li{color:var(--text-light)}
+.reason-dot{width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.card-primary .reason-dot{background:rgba(255,255,255,.5)}
+.card-secondary .reason-dot{background:var(--green-light)}
+.why-secondary{margin-top:14px;padding-top:12px;border-top:1px solid var(--cream-dark)}
+.why-secondary-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);font-weight:500;margin-bottom:5px}
+.why-secondary-text{font-size:11px;color:var(--text-light);line-height:1.6;font-style:italic;font-weight:300}
+footer{border-top:1px solid var(--border);padding:20px 40px;display:flex;justify-content:space-between;align-items:center;margin-top:40px}
+.footer-text{font-size:10px;color:var(--text-light);font-weight:300}
+.footer-since{font-size:10px;letter-spacing:.2em;color:var(--green-dark);font-weight:500;text-transform:uppercase}
+.wave-deco{position:fixed;bottom:0;right:0;opacity:.06;pointer-events:none}
+.tweaks-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-top:16px;margin-bottom:8px;opacity:.6}
+.card-primary .tweaks-label{color:rgba(255,255,255,.7)}
+.card-secondary .tweaks-label{color:var(--text-light)}
+.tweaks-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.tweaks-list li{font-size:11px;line-height:1.5;font-weight:300;display:flex;gap:8px;align-items:flex-start}
+.card-primary .tweaks-list li{color:rgba(255,255,255,.75)}
+.card-secondary .tweaks-list li{color:var(--text-light)}
+.tweak-dot{width:3px;height:3px;border-radius:50%;margin-top:5px;flex-shrink:0;background:var(--orange)}
+.playbook-card{display:none;max-width:760px;margin:16px auto 0;padding:0 40px}
+.playbook-inner{background:var(--green-dark);border-radius:4px;padding:24px}
+.playbook-title{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:300;color:white;margin-bottom:4px}
+.playbook-sub{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:500;margin-bottom:20px}
+.playbook-section-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:8px;margin-top:16px}
+.playbook-nonneg-label{color:var(--orange)}
+.playbook-common-label{color:rgba(255,255,255,.6)}
+.playbook-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.playbook-list li{font-size:12px;line-height:1.55;font-weight:300;color:rgba(255,255,255,.85);display:flex;gap:8px;align-items:flex-start}
+.playbook-dot-orange{width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;background:var(--orange)}
+.playbook-dot-white{width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;background:rgba(255,255,255,.4)}
+</style>
+</head>
+<body>
+<header>
+<div>
+<div class="logo-text">Himalaya</div>
+<div class="logo-sub">Face Care - Cohort Intelligence</div>
+</div>
+<div class="header-badge">Consumer Research Tool</div>
+</header>
+<main>
+<div class="hero">
+<div class="hero-label">Product x Cohort Matcher</div>
+<h1>Who is your<br><em>ideal consumer?</em></h1>
+<p>Describe a product — ingredients, benefits, format, price point. The tool matches it against all six face care cohorts and returns your primary and secondary target with signal-grounded reasons.</p>
+</div>
+<div class="input-section">
+<div class="input-wrapper">
+<div class="input-label">Describe your product</div>
+<textarea id="productInput" placeholder="e.g. aloe serum, or niacinamide saffron patch, or turmeric neem face wash for glow under Rs 200..." rows="4"></textarea>
+<div class="input-footer">
+<span class="input-hint">Even a few words work. More detail gives sharper results.</span>
+<button class="submit-btn" id="submitBtn" onclick="analyseProduct()">
+Analyse
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</div>
+</div>
+</div>
+<div class="examples">
+<div class="examples-label">Try an example</div>
+<div class="example-chips">
+<div class="chip" onclick="fillExample('Aloe + Cucumber face wash, 8-hour hydration claim, gel texture, Rs 300, chemist')">Hydrating face wash</div>
+<div class="chip" onclick="fillExample('pimple patch with niacinamide and saffron, quirky packaging, Rs 120')">Pimple patches</div>
+<div class="chip" onclick="fillExample('Kumkumadi overnight ayurvedic repair serum, light cream texture, Rs 1100, PM slot')">Overnight serum</div>
+<div class="chip" onclick="fillExample('Neem + Turmeric dual-action face wash for acne and dark marks, Rs 180, kirana')">Dual-action face wash</div>
+<div class="chip" onclick="fillExample('anti acne sunscreen, non-comedogenic, gel texture, zero white cast, Rs 400')">Anti-acne sunscreen</div>
+<div class="chip" onclick="fillExample('lip serum for pigmentation correction, saffron based, Rs 699')">Lip serum</div>
+<div class="chip" onclick="fillExample('sunscreen with cute charm packaging, trendy, Rs 250')">Trendy sunscreen</div>
+</div>
+</div>
+<div class="loading" id="loading">
+<div class="loading-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+<span class="loading-text">Reasoning about product and cohort gravity...</span>
+</div>
+<div class="error-box" id="errorBox"><div class="error-inner" id="errorText"></div></div>
+<div class="results" id="results">
+<div class="results-header">
+<div class="results-label">Cohort Match</div>
+<div class="results-product" id="resultProduct"></div>
+</div>
+<div class="cards">
+<div class="card card-primary">
+<div class="card-rank">Primary Target</div>
+<div class="card-cohort-name" id="primaryName">-</div>
+<div class="card-sec-age" id="primarySecAge">-</div>
+<div class="card-tam" id="primaryTam">-</div>
+<div class="card-divider"></div>
+<div class="reasons-label">Why this cohort</div>
+<ul class="reasons-list" id="primaryReasons"></ul>
+<div class="tweaks-label" id="primaryTweaksLabel" style="display:none">Product improvements for this cohort</div>
+<ul class="tweaks-list" id="primaryTweaks"></ul>
+</div>
+<div class="card card-secondary">
+<div class="card-rank">Experimental Target</div>
+<div class="card-cohort-name" id="secondaryName">-</div>
+<div class="card-sec-age" id="secondarySecAge">-</div>
+<div class="card-tam" id="secondaryTam">-</div>
+<div class="card-divider"></div>
+<div class="reasons-label">Why this cohort</div>
+<ul class="reasons-list" id="secondaryReasons"></ul>
+<div class="why-secondary">
+<div class="why-secondary-label">Adoption barrier</div>
+<div class="why-secondary-text" id="whySecondary">-</div>
+      <div class="why-secondary-label" style="margin-top:10px;">Conversion condition</div>
+      <div class="why-secondary-text" id="conversionCondition" style="color:var(--green-dark);font-style:normal;">-</div>
+</div>
+<div class="tweaks-label" id="secondaryTweaksLabel" style="display:none">Product improvements for this cohort</div>
+<ul class="tweaks-list" id="secondaryTweaks"></ul>
+</div>
+</div>
+
+    <div class="playbook-card" id="playbookCard">
+      <div class="playbook-inner">
+        <div class="playbook-title">What Himalaya Should Do</div>
+        <div class="playbook-sub">To target both primary and secondary cohorts</div>
+        <div class="playbook-section-label playbook-nonneg-label">Non-negotiables from primary cohort</div>
+        <ul class="playbook-list" id="playbookNonNeg"></ul>
+        <div class="playbook-section-label playbook-common-label">Common ground — serves both cohorts</div>
+        <ul class="playbook-list" id="playbookCommon"></ul>
+      </div>
+    </div>
+    <div id="regionalCard" style="display:none;max-width:760px;margin:16px auto 0;padding:0 40px">
+      <div style="background:white;border:1.5px solid var(--border);border-radius:4px;padding:24px;">
+        <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--green-dark);font-weight:500;margin-bottom:6px;">Regional Launch Recommendation</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:var(--cream);border-radius:3px;padding:14px;">
+            <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);font-weight:500;margin-bottom:6px;">Launch First</div>
+            <div id="regionalPrimaryCity" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--green-dark);margin-bottom:6px;">-</div>
+            <div id="regionalPrimaryReason" style="font-size:11px;color:var(--text-light);line-height:1.6;font-weight:300;"></div>
+          </div>
+          <div style="background:var(--cream);border-radius:3px;padding:14px;">
+            <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);font-weight:500;margin-bottom:6px;">Launch Second</div>
+            <div id="regionalSecondaryCity" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--green-dark);margin-bottom:6px;">-</div>
+            <div id="regionalSecondaryReason" style="font-size:11px;color:var(--text-light);line-height:1.6;font-weight:300;"></div>
+          </div>
+        </div>
+        <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);font-weight:500;margin-bottom:8px;">All Cities Ranked</div>
+        <ul id="regionalRanking" style="list-style:none;display:flex;flex-direction:column;gap:5px;"></ul>
+      </div>
+    </div>
+</div>
+</main>
+<div style="max-width:760px;margin:40px auto 0;padding:0 40px 60px;border-top:1px solid var(--border);padding-top:40px;">
+  <div style="font-size:10px;letter-spacing:.3em;color:var(--orange);text-transform:uppercase;margin-bottom:14px;font-weight:500;">Future Needs Explorer</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--green-dark);margin-bottom:10px;">Where is she going<br><em>in 5 years?</em></div>
+  <p style="font-size:13px;color:var(--text-light);line-height:1.7;font-weight:300;margin-bottom:24px;max-width:500px;">Enter a city and cohort to understand what this consumer will need in 3-5 years — as she ages, her life stage shifts, and her city shapes her trajectory.</p>
+  <div style="border:1.5px solid var(--green-dark);border-radius:4px;background:white;overflow:hidden;margin-bottom:24px;">
+    <div style="padding:14px 18px 0;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--green-light);font-weight:500;">Your query</div>
+    <textarea id="futureInput" placeholder="e.g. Delhi, Skin Strategist, 5 years — or — Mumbai, Beauty Elites Moms, 3 years — or — What will a Kolkata Future Glow Investor need in 5 years?" rows="3" style="width:100%;border:none;outline:none;resize:none;padding:8px 18px 14px;font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:transparent;font-weight:300;min-height:80px;"></textarea>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--cream-dark);background:#FAFAF8;">
+      <span style="font-size:11px;color:var(--text-light);font-weight:300;">City + cohort + time horizon gives the sharpest answer</span>
+      <button onclick="exploreFuture()" id="futureBtn" style="display:flex;align-items:center;gap:8px;background:var(--green-dark);color:white;border:none;padding:9px 20px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:.08em;cursor:pointer;">
+        Explore
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3L12 7L8 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="futureLoading" style="display:none;align-items:center;gap:14px;margin-bottom:20px;">
+    <div style="display:flex;gap:5px;"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <span style="font-size:12px;color:var(--text-light);font-weight:300;font-style:italic;">Projecting forward...</span>
+  </div>
+  <div id="futureError" style="display:none;background:#FFF5F0;border:1px solid rgba(212,84,26,.2);border-radius:4px;padding:16px 20px;font-size:12px;color:var(--orange);line-height:1.6;margin-bottom:16px;"></div>
+  <div id="futureResults" style="display:none;">
+    <div style="background:var(--green-dark);border-radius:4px;padding:24px;">
+      <div style="font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;font-weight:500;">Future Cohort</div>
+      <div id="futureCohortName" style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:white;margin-bottom:4px;">-</div>
+      <div id="futureCityName" style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:20px;font-weight:500;">-</div>
+      <div style="height:1px;background:rgba(255,255,255,.15);margin-bottom:16px;"></div>
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:500;">What drives the transition</div>
+      <ul id="futureTransitionDrivers" style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:16px;"></ul>
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:500;">Emerging needs in 3-5 years</div>
+      <ul id="futureNeeds" style="list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:16px;"></ul>
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;font-weight:500;">City amplifier</div>
+      <p id="futureCityAmplifier" style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.6;font-weight:300;margin-bottom:16px;"></p>
+      <div style="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px;font-weight:500;">Himalaya opportunity</div>
+      <p id="futureOpportunity" style="font-size:12px;color:rgba(255,255,255,.88);line-height:1.6;font-weight:300;"></p>
+    </div>
+  </div>
+</div>
+
+<svg class="wave-deco" width="300" height="300" viewBox="0 0 300 300">
+<path d="M300 200 Q250 150 300 100" stroke="#1E4D30" stroke-width="2" fill="none"/>
+<path d="M300 220 Q240 160 300 110" stroke="#1E4D30" stroke-width="2" fill="none"/>
+<path d="M300 240 Q230 170 300 120" stroke="#1E4D30" stroke-width="2" fill="none"/>
+<path d="M300 260 Q220 180 300 130" stroke="#1E4D30" stroke-width="2" fill="none"/>
+<path d="M300 280 Q210 190 300 140" stroke="#1E4D30" stroke-width="2" fill="none"/>
+</svg>
+<footer>
+<span class="footer-text">Grounded in qualitative and quantitative consumer research. Himalaya Face Care 2025</span>
+<span class="footer-since">Since 1930</span>
+</footer>
+<script>
+// API key stored securely in Netlify environment variable
+const FUTURE_PROMPT = `You are a predictive consumer analyst for Himalaya Face Care. Given cohort + city + time horizon, generate specific non-generic skincare predictions.
+
+HARD RULES:
+1. Cohort behavioral data = foundation. Mintel signals = enrichment only. Never reverse.
+2. Only ONE migration step per prediction regardless of time horizon.
+3. Anti-ageing is ONLY a real concern for Beauty Elites (25+) and Ritual Seekers (via FW claim). Never predict anti-ageing for under-25 cohorts.
+4. Specificity test: if your answer would be identical for a different cohort in a different city, rewrite it.
+
+---
+
+MIGRATION (one step only):
+- Trend Seekers (A1 <20) → Informed Upgraders (A1 21-25) in 5 years. Her story: post-acne marks deepening, ingredient literacy growing, D2C habits forming, lip care building. NOT anti-ageing.
+- Affordability Aspirers (A2+B <20) → Mindful Evaluators (A2+B 21-25) in 5 years. Her story: glow aspiration persists, actives curiosity at ~50%, finding first simple serum, breaking from mother influence.
+- Informed Upgraders (A1 21-25) → Beauty Elites (A1 25+) in 5 years. Her story: marks correction mission deepening, career consolidating, spending upgrading, Moms sub-segment possible, hydration gap emerging.
+- Mindful Evaluators (A2+B 21-25) → Ritual Seekers (A2+B 25+) in 5 years. Her story: routine may entrench or slightly upgrade, life stage triggers matter, actives use remains reactive.
+- Beauty Elites (A1 25+) — ages deeper. Hydration gap urgent, fine lines visible, Moms grows, biotech first real window.
+- Ritual Seekers (A2+B 25+) — stays, entrenches. Anti-ageing via FW more important. Naturals remain dominant.
+
+---
+
+CURRENT COHORT DATA:
+TREND SEEKERS (A1 <20): Glass skin K-beauty. Acne = identity crisis. Board exam = first crisis. Vit C entry serum. Ceramides, snail mucin, zinc PCA trending. Instagrammable packaging. Validates with peers before buying.
+AFFORDABILITY ASPIRERS (A2+B <20): Glow aspiration vs acne/dry skin reality. Real buyer = mother. 88% household-influenced. No actives. Home remedies mother-recommended.
+INFORMED UPGRADERS (A1 21-25): Post-acne marks phase. Vit C 52%, HA 42%, Niacinamide 37%. First salary = upgrade moment. Himalaya not #1 FW. Lip care building. Validates on Nykaa.
+MINDFUL EVALUATORS (A2+B 21-25): Glow + even skin tone framing. Actives ~50% openness. Nature + Science excites. Tries serums, drops them. Budget-conscious. Social media dominant trigger.
+BEAUTY ELITES (A1 25+): Mandatory maintenance. 70% natural + 30% science. 4-5hr hydration, needs 7-8. Moms: compressed routine, multifunctional. Combination skin + marks + fine lines. Dermat normalised.
+RITUAL SEEKERS (A2+B 25+): Safety-first. Home remedies = foundation. FW = only branded product, expected to do everything. Chemical fear 65%. Naturals = safe. Actives not in routine.
+
+---
+
+SEC-CALIBRATED INGREDIENT TRAJECTORY:
+
+SEC A1 ALL COHORTS — OPTIMISERS:
+In 5 years, SEC A1 is ready for: signal peptides, biotech actives (delivery systems, encapsulation), precision formulations, provenance-plus-science storytelling. Niche naturals emerging strongly — luxury positioning, ownable by Himalaya (Ashwagandha, Lodhra bark, Manjistha, Bakuchi, Centella Asiatica high-grade). Pre-purchase ingredient comparison is how she decides. % on pack = table stakes. Differentiator = delivery mechanism and natural pairing story.
+
+SEC A2+B 21-25 (Mindful Evaluators becoming Ritual Seekers):
+In 5 years, they will have adopted what current SEC A1 21-25 uses TODAY: Niacinamide, Vit C, basic HA, basic Salicylic Acid. These are their "advanced" ingredients in 5 years. A small 10-15% will trial genuinely new ingredients IF accessible and not intimidating. Trending naturals with familiar names (turmeric derivatives, saffron, neem bioactives) are the bridge. Nature + Science framing still works. No biotech framing — too clinical.
+
+SEC A2+B 25+ (Ritual Seekers staying):
+In 5 years, they remain 90%+ naturals-only. Their version of "trending" is NATURAL EVOLUTION — familiar naturals with enhanced efficacy claims (not new synthetics). Think: turmeric extract (not raw turmeric), fermented neem, concentrated aloe bioferment. They will NOT be using peptides or encapsulated actives in 5 years. For them, trending = modernised versions of what they already trust. Himalaya's opportunity is modernising familiar naturals with a gentle efficacy claim, not introducing new science.
+
+---
+
+CITY AMPLIFIERS:
+Delhi (North, 27% biotech openness): Highest status + appearance pressure. Adopts premium trends earliest. K-beauty to F-beauty pipeline. Anti-ageing pressure arrives early.
+Mumbai (West, 24% biotech openness): Career = identity. Time scarcity grows with age. Multifunctional demand intensifies. Efficiency + VFM framing essential.
+Chennai (South, 16% biotech openness): Dermat search highest (1.0). Conservative, family-driven. Ayurvedic + science hybrid works. Pure biotech fails. Needs gentle framing.
+Kolkata (East, 27% biotech openness): Highest latent demand. Value-conscious. Himalaya trust strongest. Anti-ageing search = highest of all cities. Patient with delayed results.
+
+---
+
+HIMALAYA NATURAL PAIRING LOGIC:
+For each trending ingredient identified, find a complementary natural that:
+1. Scientifically enhances or soothes the active (not random)
+2. Matches the cohort's natural preference tier (luxury niche for A1, familiar trusted for A2+B)
+3. Is ideally ownable/niche enough for Himalaya (not generic aloe/turmeric for A1 — those are table stakes)
+Examples: Signal peptides + Ashwagandha (adaptogen reduces cortisol-driven skin degradation, amplifies peptide repair). Zinc PCA + Lodhra bark (traditional Indian astringent, complements sebum regulation). Niacinamide + Manjistha (traditional brightening herb, synergistic even-tone action). HA + Shatavari (Ayurvedic moisture-binding root, hydration depth story).
+
+---
+
+OUTPUT — Valid JSON only. No text outside JSON. No markdown. Keep responses concise.
+
+{"current_cohort":"cohort + sub-segment","future_cohort":"future cohort + what changes specifically","city":"city","time_horizon":"X years","transition_drivers":["specific life change grounded in THIS cohort — not generic","driver 2","driver 3"],"city_dynamics":"How this city specifically shapes her predicted trajectory — must be different from other cities. 2 sentences max.","emerging_needs":["specific need combining cohort trajectory + relevant signal — not generic","need 2","need 3"],"trending_ingredients":["ingredient name + why for THIS cohort at THIS time (SEC-calibrated) + innovation zone","ingredient 2","ingredient 3"],"himalaya_pairing":"One specific active/trending ingredient paired with one complementary niche natural — explain the pairing logic and why it works for this cohort in this city."}`;
+const SYSTEM_PROMPT = `You are a consumer insight analyst for Himalaya Face Care. Your job is to match a product to its best-fit consumer cohort through structured reasoning — not keyword lookup.
+
+---
+
+REASONING FRAMEWORK — FOLLOW IN ORDER
+
+STEP 1: DECODE THE PRODUCT
+- List all ingredients mentioned → infer their benefits using the INGREDIENT-BENEFIT MAP below
+- Combine with any explicit benefits stated in the query (query-stated benefits = primary, ingredient-inferred = secondary)
+- Identify: format (face wash / serum / patch / sunscreen / cream / gel / lip product / multifunctional etc.), price tier (mass <Rs150 / masstige Rs150-350 / premium Rs350-800 / luxury Rs800+), emotional job (aspiration / treatment / maintenance / prevention / trend / safety / anxiety-relief)
+
+STEP 2: ELIMINATE STRUCTURALLY IMPOSSIBLE COHORTS
+Before matching gravity, eliminate cohorts where adoption is structurally blocked regardless of ingredient affinity:
+- RITUAL SEEKERS: Eliminate for any standalone serum, actives-led treatment, anything above Rs 150, anything requiring daily routine discipline beyond face wash. EXCEPTION: A naturals-heavy serum (turmeric/aloe/neem dominant, no synthetic actives on front of pack, mass price) can make her the EXPERIMENTAL TARGET — not primary, because the barrier is real but naturals-only ingredient story specifically lowers it.
+- AFFORDABILITY ASPIRERS: Eliminate for any serum/treatment product, anything above Rs 150, anything requiring mother's approval for "chemicals." Cannot be primary for actives.
+- TREND SEEKERS (School Girlie): Eliminate for serums, actives, anything above Rs 200 without pocket money accessibility.
+- Any A2+B cohort: Cannot be primary for products requiring consistent multi-week routine discipline.
+
+STEP 3: MATCH ON BENEFIT-NEED GRAVITY
+Among remaining cohorts, ask: whose NEEDS most closely match the product's BENEFITS? 
+- Do not match on ingredients alone — match on what the ingredients DO and who NEEDS that outcome
+- Multiple cohorts may share a benefit need — the primary is the one with strongest gravity across: need intensity + format readiness + no structural barriers + price accessibility
+- Example: Turmeric serum → benefits = brightening + even skin tone + anti-inflammatory. Ritual Seekers need brightening (eliminated due to serum barrier). Mindful Evaluators need even skin tone 67% + glow (their top aspiration) + actives openness ~50% + turmeric is a familiar natural bridging their home-remedy comfort into serum format. Beauty Elites want naturals+science but prefer Vit C/HA/Niacinamide for these benefits — turmeric alone is not their serum of choice. So Mindful Evaluators win primary.
+
+STEP 4: IDENTIFY EXPERIMENTAL TARGET (secondary cohort)
+The experimental target is NOT simply second-best gravity. It is: a cohort with real adoption barriers for this product, BUT where a specific aspect of the product (ingredient, format, price, claim) specifically lowers that barrier enough to make conversion plausible with the right approach.
+- Always name the specific barrier AND the specific conversion condition
+- Example: Ritual Seekers for a naturals serum — barrier = serum format + chemical anxiety. Conversion condition = if positioned as "home remedy in a bottle, in a serum," at mass price, with kirana availability and trusted brand (Himalaya). Not "she will buy it easily" but "this is the cohort where the product has its best shot at expanding the category."
+
+STEP 5: STRATEGIC ANGLE
+Does this product have a deeper strategic implication beyond fit?
+- Category retention (face wash becoming optional for Mindful Evaluators — a dual-action FW brings her back)
+- First-moment capture (board exam acne for Trend Seekers, first salary for Informed Upgraders, post-pregnancy for Beauty Elites Moms)
+- Category education unlock (sunscreen for Ritual Seekers needs benefit reframe: "curates the sun's goodness")
+- Competitive defence (Himalaya losing Informed Upgraders to D2C — this product fights back)
+- Adjacent category bridge (lip + face bundle for Informed Upgraders building lip routine)
+- Himalaya heritage advantage (Moms: "they make baby products, safe for my face")
+If none genuinely applies: "Strong direct fit. No additional strategic angle."
+
+STEP 6: PRODUCT RECOMMENDATIONS + HIMALAYA PLAYBOOK
+Generate 3-4 product_tweaks per cohort (formulation/format/packaging/claim changes only, not channel/communication).
+Generate himalaya_playbook: non-negotiables from primary + common ground serving both.
+
+---
+
+INGREDIENT-BENEFIT MAP
+Turmeric/Haldi → Brightening + even skin tone | Anti-inflammatory + acne-soothing
+Neem → Acne/pimple control + antibacterial | Oil control
+Aloe Vera → Soothing/calming + hydration | Gentle cleansing, barrier support
+Niacinamide → Even skin tone + pigmentation reduction | Pore minimizing
+Vitamin C → Brightening + glow | Post-acne marks/pigmentation correction
+Hyaluronic Acid → Deep hydration + plumping | Moisture retention all-day
+Salicylic Acid → Active acne treatment + pore unclogging | Oil control
+Ceramides → Skin barrier repair + hydration | Sensitive skin protection
+Snail Mucin → Repair + hydration | Glow enhancement
+Zinc PCA → Sebum/oil control + acne reduction | Pore tightening
+Saffron → Brightening/fairness + luxury glow | Anti-pigmentation
+Sandalwood/Chandan → Soothing + anti-inflammatory | Brightening
+Vitamin E → Antioxidant repair + nourishment | Anti-ageing prevention
+Retinol → Anti-ageing/wrinkle reduction + cell turnover | Pigmentation correction
+Peptides → Anti-ageing/firming + collagen support | Skin repair
+Kumkumadi → Brightening + luxury ayurvedic glow | Pigmentation correction
+Glycerin → Hydration + moisture barrier | Gentle sensitive skin
+Kojic Acid → Brightening + dark spot correction | Skin whitening
+Glutathione → Skin brightening + antioxidant | Overall glow
+Vitamin A → Cell renewal + anti-ageing | Acne treatment
+Tea Tree → Antibacterial + acne control | Anti-inflammatory
+Rose Water → Soothing + mild brightening | Hydration and freshness
+Charcoal → Deep pore cleansing + detox | Oil control
+Micellar → Gentle makeup/impurity removal | No-rinse gentle format
+
+---
+
+THE SIX COHORTS
+
+COHORT 1 — TREND SEEKERS
+SEC A1 | Age under 20 | TAM: Rs 352 cr | Per capita: Rs 3200
+Sub-segments: School Girlie (under 17) and College Joiner (17-20). Always specify.
+
+WHO SHE IS: Knows beauty language before owning products — K-beauty glass skin is her aspiration. Can reverse-influence her mother about trending treatment products. Face wash is household-driven unless a dermat FW solves her specific acne problem. Spends pocket money on serums (Vit C being entry serum). Standalone products fitting Korean glass skin aspiration while assuring no breakouts can be sold in premium packaging with instagrammable colours and quirky aesthetics.
+BEAUTY IDEAL: Glass skin (K-beauty). Acne/flaws = identity crisis. School Girlie: wants flawless skin, no acne yet, tanning (32%) is main concern, dry + sensitive skin (41%). College Joiner: acne is identity crisis, K-beauty glass skin active aspiration.
+SKIN ISSUES: School Girlie — dry + sensitive (41%), tanning (32%). College Joiner — acne (67%), combination skin + acne spots from treatment (32%).
+REGIMEN: School Girlie — AM: FW + basic moisturizer. No sunscreen, no serum. Home remedies 2-3x/week (trending ones from Instagram like rice water). College Joiner — AM: FW + moisturizer + Vit C serum + sunscreen (36%, skipped during active breakout). PM: FW + ceramides/moisturizer. Pimple patches = reactive not daily.
+SOLUTIONS: Trendy formats (patches via Instagram/ChatGPT). Diet adjustments. Vit C for brightening not treatment. Korean ceramides, pimple patches from OTT + social media. School Girlie: not open to actives. College Joiner: premium naturals for oil control. Trending ingredients: ceramides, snail mucin, zinc PCA, Vit C, aloe, tea tree, saffron/sandal for luxury glow.
+TRIAL DRIVERS: Acne urgency. Peer WOM + mother for budget approval. Instagram influencers (GRWM, lifestyle, dermat). Trend-led FOMO. Cute + trendy packaging. Board exam stress = first acne crisis moment = own this moment. K-pop idol association works. Wants products that explicitly claim won't cause breakouts. CRITICAL: She can sense ad reels immediately — overtly promotional content is ignored. Product placement in OTT shows, lifestyle creator routines, dermat infotainment content is the only advertising that works.
+TRIAL BARRIERS: Bad past product experience. Digital transaction constraints (under 18). Wants to steer clear of legacy brands like Ponds, Himalaya ("mom's brands"). Fear of skin reaction.
+MEDIA: YouTube 83-95%, Instagram 67-86%, OTT 59-63%. Low trust in traditional ads. Follows dermat influencers, lifestyle creators, GRWM content. Senses ad reels immediately.
+PURCHASE: FW offline 82-92% (chemist primary). Non-FW self-purchase 82% mostly online (67%). Online restricted for under-18 without UPI.
+CONSTRAINT PROFILE: Can be primary for: patches, aspirational serums (Vit C, K-beauty ingredients), trendy formats at masstige price. Cannot be primary for: face wash (household-driven), clinical treatment products, anything requiring multi-step discipline.
+
+---
+
+COHORT 2 — AFFORDABILITY ASPIRERS
+SEC A2+B | Age under 20 | TAM: Rs 420 cr | Per capita: Rs 1000
+REAL BUYER IS THE MOTHER — not the teen.
+
+WHO SHE IS: Wants brightness and glow (74%) despite suffering from acne and dry skin. Fundamental misalignment: buys the dream not the cure. Dry skin caused by SOAP (not face wash), blames weather. Dullness is misreported PIH — lacks skincare vocabulary. Confuses pimple with acne. Beauty perception very similar to her mother's (Ritual Seekers). Home remedies = mother-recommended (besan, haldi, curd — NOT trending Instagram ones).
+BEAUTY IDEAL: Bright spotless skin. Prioritises fair and bright skin even when acne is active problem.
+SKIN ISSUES: Dry skin (soap-caused), acne, dullness (actually PIH).
+REGIMEN: No AM/PM structure. Reactive, mother-driven. FW + home remedy if breakout (54%). No consistent moisturizer or sunscreen. Low serum adoption (24% tried once, near zero sustained). Serums/treatment products negligible due to chemical fear from mother.
+SOLUTIONS: Home remedies (mother-recommended). FW with utility naturals (aloe, neem) — mother-approved. Self-purchases = aspirational glow products in small formats/sachets. First needs category education to diagnose issues properly.
+MOTHER DYNAMIC: 88% household-influenced. Need to win mother's trust. Different from A1 teens — A1 mothers are more open; Affordability Aspirer's mother has stronger chemical anxiety and gatekeeping. Has no dermat access unlike A1 teens.
+TRIAL DRIVERS: Household influence 88%. Self-purchase (12%): glow/fairness 65%, TV ads 39%, ingredient curiosity 30% (novelty signal not comprehension). Small formats + sachets for self-purchase.
+TRIAL BARRIERS: Parental gatekeeping. Mother's brand loyalty. Budget 42%. Home remedies better belief 26%. No perceived need.
+MEDIA: TV with mother (key). YouTube 91%, Instagram 70%, OTT 37%. Exposure to FB/Instagram pages. High engagement-to-conversion gap.
+PURCHASE: FW 90% offline (kirana, mother buys). FW = grocery item. Online = exploratory only.
+CONSTRAINT PROFILE: Can be primary for: face wash (through mother), sachets of glow/brightening products. Cannot be primary for: serums, treatment actives, anything above Rs 150, anything mother considers "chemical."
+
+---
+
+COHORT 3 — INFORMED UPGRADERS (previously Skin Strategists)
+SEC A1 | Age 21-25 | TAM: Rs 863 cr | Per capita: Rs 7504
+
+WHO SHE IS: Most ingredient-literate consumer. Skincare = social currency and identity. Will read and research labels. Overclaiming without proof = ignored. Honest claims + ingredient proof = patient and loyal. Natural flawless skin is beauty ideal. Done fighting acne, now correcting its aftermath (pigmentation, marks, dry skin). Understands her skin concerns and available products/ingredients. Packaging instantly signals quality — cheap packaging = mass brand = distrust (this is not shallow, it is her quality filter).
+BEAUTY IDEAL: Natural flawless skin (No Makeup Makeup Look). Done with acne, now fixing pigmentation and dark spots. Dull, dry skin is current landscape.
+SKIN ISSUES: Pigmentation from past acne + makeup overuse is biggest issue. Lip darkening + hyperpigmentation (31%) from cosmetics. Dry skin from over-treatment. Lower active acne (better teen treatment).
+REGIMEN: Understands skin concerns and products. Multi-step AM/PM. AM: FW or micellar + FW → Toner → Moisturizer → Sunscreen. PM: FW → concern-specific serum → Moisturizer. Weekly: face pack 37%, scrub 32%. Different brands per step. Double cleansing starting to emerge. Strong internet-led trend influence (F-beauty: micellar water).
+SOLUTIONS: Highest actives literacy: Vit C 52%, HA 42%, Niacinamide 37%, Salicylic Acid 31%. Multi-serum layering. Lip care now a full sub-category she's building (lip serum, overnight lip mask like Laneige, tinted lip balm, lip oil — plumping, pigmentation correction, SPF lips). Base naturals at parity with aspirational naturals. Dermat normalised. Researches across Instagram, YouTube, Nykaa, Amazon, Tira, Reddit.
+FIRST SALARY MOMENT: When she upgrades from fragmented choices to proper routine. Premium ingredient-heavy products as self-reward.
+TRIAL DRIVERS: VFM 71%. Problem not solving 67%. Multi-source validation (peers + Nykaa reviews + ingredient knowledge, 25-30% each). Dermat recommendation 25%. Sensory + fragrance. Non-comedogenic. Packaging aesthetics signal quality. Negative makeup experience → skin-first solutions.
+TRIAL BARRIERS: Sticky/heavy texture or off-fragrance. Harsh/foaming cleansers (prefers gel/micellar/hydrating). No perceived need 25%. Least brand loyalty — drops if delayed/no visible results. D2C brands aggressively adopted. Himalaya is NOT her #1 FW and is losing her at every category.
+MEDIA: YouTube 100%, Instagram 79%, OTT 53%. Research-led not trend-led. Validates on Nykaa (reads ingredient lists, reviews). Won't convert on social alone.
+PURCHASE: FW 47% online / 53% offline. Serums 81% online, sunscreen 75% online. Q-commerce for urgent replenishment (8%). 54% stock serums at home. Supermarket for browsing + planned purchases.
+CRITICAL: Himalaya is NOT her #1 face wash — she is actively switching to niche D2C brands. Brand legacy cannot hold her, needs formulation relevance + honest claims + premium minimal packaging. This is the only cohort where Himalaya is actively losing share.
+CONSTRAINT PROFILE: Can be primary for: treatment serums, actives, lip care, premium FW with specific ingredient story, sunscreen. Has highest format readiness. Cannot be held by brand legacy alone.
+
+---
+
+COHORT 4 — MINDFUL EVALUATORS (previously Future Glow/Compound Burden)
+SEC A2+B | Age 21-25 | TAM: Rs 1250 cr | Per capita: Rs 2500
+
+WHO SHE IS: Facecare = glow + even skin tone, not clinical treatment. Skincare = self-care and looking beautiful. Mother's influence reducing, forming own perception from peers + social media. Dermat approved is NOT a primary switch trigger — budget and social media are. Considers anti-ageing a problem even though not an actual issue yet (aspiration-led anxiety). "Nature + Science" combination excites her more than either in isolation. Seeks VFM products, higher trust on legacy brands like Himalaya, Ponds. She is waiting for someone to make actives simple and accessible, not intimidating.
+BEAUTY IDEAL: Even-toned glowing skin. Self-care not disease correction. Wants skincare to feel like self-investment.
+SKIN ISSUES: Acne 43% (under-treated in teen years), Dullness 27%, Dry skin 27%, Dark spots 22%, Oily skin 18%. Seeking hydrated, acne-free, bright skin.
+FW CONUNDRUM: FW becoming optional — 31% already skipping (using soap), investing in actives. Rest 58% still on FW + home remedies. A product combining glow/fair skin/pre-ageing with acne-prevention can make her switch back to FW. Making FW do more retains 58% and keeps Himalaya dominant. For the 31% who switched: win her at first switch moment when overwhelmed — give her simple "first step" serum (acne + glow or preventive glow).
+ACTIVES RELATIONSHIP: Curious but not ingredient literate. Actives on packaging signals effectiveness without comprehension. Openness ~50% — at tipping point of mainstream. Exploring familiar actives (Vit C, HA) but reluctant on lesser known (Glutathione, Thiamidol). Nature + Science excites her. Trial-friendly formats (minis, sachets) reduce risk of committing.
+TRIAL DRIVERS: Social media 41% dominant switch trigger. Peer validation + online reviews convert. Budget-conscious (masstige not premium). Legacy brand trust (Himalaya, Ponds). Less thorough research vs Informed Upgraders.
+TRIAL BARRIERS: Budget 44% (masstige not premium). Home remedies better belief 31%. Low routine discipline — inconsistent actives use reduces trust and repeats. Inconsistent and reactive usage leads to conflicting product use and delayed recovery.
+MEDIA: YouTube 90%, Instagram 68%, OTT 35%. Active engagement only when specific problem exists. Instagram = awareness + wishlist, decisions influenced by friends/family more than online reviews.
+PURCHASE: FW 88% offline (kirana 35%, chemist 24%), 12% online (deals/discounts). Serums ~65% online, sunscreen ~62% online. Trial SKUs preferred over consumption SKUs.
+CONSTRAINT PROFILE: Can be primary for: dual-action FW (acne + glow), simple accessible serums (familiar actives at masstige price), trial formats. Cannot be primary for: premium serums (budget barrier), multi-step actives routines (discipline barrier), any product above Rs 400 without clear VFM proof.
+
+---
+
+COHORT 5 — BEAUTY ELITES
+SEC A1 | Age 26-40 | TAM: Rs 3705 cr | Per capita: Rs 9500
+Sub-segments: Moms and Without Kids. Specify when product fit differs.
+
+WHO SHE IS (BOTH): Skincare = mandatory maintenance, does it to feel confident. Wants to age gracefully. Ingredient knowledge not as deep as Informed Upgraders — judges on benefit claims not ingredients. Too many scientific jargons = lab product feel = avoided. Needs perfect naturals + science mix. Even when shifts to premium ayurveda, uses it at night and balances with actives in day.
+BEAUTY IDEAL: Flawless ageless skin that radiates from within. Healthy, dewy, soft and bouncy. Baby skin (equal, supple, spot-free) is universal benchmark. Good skin = not needing makeup. Anti-ageing = graceful ageing not reversal.
+SKIN ISSUES: Pigmentation + uneven skin tone biggest concern. Combination skin + acne marks + fine lines. Acne is different from teenage — same products won't work. Hydration gap: 4-5 hours actual vs 7-8 hours needed. Rich oils in premium ayurveda trigger acne for oily skin (25%).
+SOLUTIONS (BOTH): Multi-serum layering: Vit C 58%, Vit E 44%, HA 39%, Niacinamide 33%. Peptides + ceramides recommended by dermat influencers/beauticians. Carries moisturizer for reapplication (hydration anxiety). Night use of serums (avoids daytime stickiness). Science AM, premium ayurveda PM.
+TRIAL DRIVERS (COMMON): Believability of claims > claim strength. Sensory experience = efficacy signal. In-store trials essential (touch-validates hydration). Salons as awareness + trial channels. Dermat recommendation accelerates adoption. WhatsApp groups/kitty circles for conversion. Small trial packs before routine shift. Aggressive discounts signal poor quality (unlike A2+B).
+TRIAL BARRIERS (COMMON): No expert recommendation. No perceived need (38%). Limited ingredient depth vs under-25 A1. Claims skepticism. Bad experience on one product = wary of whole brand. Products needing 10-15+ min active attention (especially for Moms).
+
+MOMS SUB-SEGMENT:
+Anti-ageing is a BIGGER concern for Moms than Without Kids. Routine compressed — AM: FW + moisturiser + sunscreen is maximum. Multifunctional products are the unmet need. Evening/night = recovery window after kids sleep — serums happen here. Baby proximity fear → some switch to premium ayurveda (paraben-free). "They make baby products, safe for my face" = Himalaya heritage advantage. WOM from same life-stage (not just same skin type) is #1 trigger. Trusted brand extension removes research time (genuinely scarce). Pediatricians = good trial point. Post-pregnancy: pigmentation, dullness, acne flares. If no improvement in 2-3 weeks, Moms quit (time-poor).
+
+WITHOUT KIDS SUB-SEGMENT:
+Full 5-7 step routine. AM: cleanse → tone → serum → moisturiser → sunscreen. PM: micellar → FW → serum → moisturizer → night cream. Has time to notice skin changes. 70% natural + 30% science ideology deeply held. Prefers utility naturals in FW (aloe, cucumber, Vit E) — NOT luxury naturals (saffron, sandal belong in serums for this cohort). Premium ayurveda in PM slot.
+MEDIA: YouTube 87%, Instagram 71%, OTT 40% (67% cord cutters). Aspirational celebrity #1 awareness trigger. WhatsApp groups strongest conversion channel. Research-backed not FOMO-led.
+PURCHASE: FW 85% offline, 15% online. Chemist #1 offline (face care premiumised above grocery). Serums 75% online, sunscreen 68% online. Rs 800-1200 for serums.
+CONSTRAINT PROFILE: Can be primary for: all formats. Highest spending power and format readiness. Primary for: anti-ageing products, premium serums, multifunctional products (Moms sub-segment), hydration-led FW, sunscreen.
+
+---
+
+COHORT 6 — RITUAL SEEKERS
+SEC A2+B | Age 26-40 | TAM: Rs 4800 cr | Per capita: Rs 2743
+
+WHO SHE IS: Wants glowing skin that looks young and natural. Anxious about chemicals, wants to achieve ideal skin through natural products. Brand loyalty = inertia to avoid risk — will wait for trusted brand to launch what she needs. First question: "will this harm my skin?" Benefit is secondary to safety. Home remedies = foundation, branded products sit on top. A brand cannot dismiss home remedies — must position as enhancement/add-on after home remedy.
+BEAUTY IDEAL: Glowing, youthful, fair skin. Natural looking — as natural as possible. Not clinical.
+SKIN ISSUES: Oily/dry combination (managing by product switching). Adult acne. Urban skin fatigue: dullness + pollution damage at higher level than SEC A1 (brands haven't communicated solutions in her preferred language). Ageing but NOT ready to buy separate anti-ageing product — expects face wash to deliver it.
+REGIMEN: No set routine unlike SEC A1. FW + cream daily. Face scrubs 2-3x/month. Uses serums only for specific concerns until resolved (not as consistent routine step). Home remedies dominant. Focuses on de-tan, moisturisation, basic upkeep. Not indulgent — face wash and home remedies feel "fine enough." CRITICAL: Face wash is the ONLY branded product category she uses consistently. She expects it to carry EVERYTHING — cleansing, anti-ageing, brightening, oil control. This makes face wash her highest-leverage category.
+SOLUTIONS: Seeks natural products/ingredients. Limited new-age ingredient awareness. Limited research across products. Although open to all formats and brands, higher affinity for FW, creams, and legacy/well-known brands. Familiar naturals on label (neem, aloe, turmeric) + trusted tradition framing = entry point. HOWEVER: affordable naturals-heavy serums can open the category — but requires significant communication effort. Naturals = safe. Actives not part of routine. Highest chemical anxiety.
+SUNSCREEN: Frames it around tan prevention (which it can't fully deliver) → concludes useless. Defaults to rose water in heat. When reframed as "getting sun's goodness while blocking harmful UV" → slightly open. Category education problem not product problem.
+TRIAL DRIVERS: Natural/ayurvedic claims ("won't hurt my skin"). Real-life triggers only (friend's tip, chemist recommendation, visible skin issue). Trusted brand extension — waits for her trusted brand to launch. VFM (invests in premium like Forest Essentials/Kama for specific products but demands value). Discounts + small sizes lower financial risk.
+TRIAL BARRIERS: Chemical fear 65%. Justifying expensive product to spouse difficult. Not open to new/unknown brands. Unavailability in her consideration set brands = barrier. Goes Instagram-only = misses her entirely.
+MEDIA: YouTube 82%, Instagram 44%, OTT 17%. TV still biggest FW switch trigger. Watches home remedy beauty content on YouTube — passes it to her daughter (Affordability Aspirer). If brand is Instagram-only, it will NOT reach her.
+PURCHASE: 96% offline, 4% online. Husband involved in 11% of purchases (monthly grocery). Kirana shelf = non-negotiable. Distrusts online (fears duplicates, skin damage). Spousal approval = real barrier.
+CONSTRAINT PROFILE: Can be primary for: face wash (mass price, utility naturals), home-remedy-adjacent products, ayurvedic products positioned as safe/traditional. EXPERIMENTAL TARGET ONLY for: serums (naturals-heavy at mass price, positioned as home remedy extension can lower the barrier — significant communication needed). Cannot be primary for: actives-led products, premium formats, anything above Rs 200.
+
+---
+
+CROSS-COHORT BENEFIT-GRAVITY GUIDE
+
+BRIGHTENING / GLOW / EVEN SKIN TONE BENEFITS:
+- Mindful Evaluators primary — even skin tone is her #1 aspiration (67%), glow = self-care identity. Actives curiosity ~50% means she's ready for a simple brightening product.
+- Affordability Aspirers — glow aspiration 74% but only for face wash format at mass price, through mother.
+- Ritual Seekers — wants youthful glow but only through naturals/home-remedy-adjacent positioning.
+- Informed Upgraders — already using Vit C 52% for this. A new brightening serum needs to offer something differentiated.
+
+ANTI-ACNE BENEFITS:
+- Mindful Evaluators primary for accessible acne products (43% active acne, actives openness ~50%, familiar actives).
+- Trend Seekers College Joiner — acne = identity crisis, patches and non-comedogenic products specifically.
+- Ritual Seekers — expects FW to handle acne with neem-based naturals.
+
+POST-ACNE MARKS / PIGMENTATION:
+- Informed Upgraders primary — 68% concern, highest urgency, mapped to Vit C + Niacinamide specifically.
+- Beauty Elites — pigmentation + uneven tone biggest concern, premium serum territory.
+
+ANTI-AGEING BENEFITS:
+- Beauty Elites primary for dedicated anti-ageing products (serums, creams).
+- Ritual Seekers primary for anti-ageing CLAIM in face wash (won't add separate product — expects FW to deliver).
+- Mindful Evaluators — anti-ageing anxiety exists but no action yet (no budget/discipline for preventive products).
+
+HYDRATION BENEFITS:
+- Beauty Elites primary for long-lasting hydration (7-8 hour gap is most explicitly stated unmet need in study).
+- Informed Upgraders — HA 42% usage, dry skin from over-treatment.
+
+BARRIER REPAIR / SENSITIVE SKIN:
+- Trend Seekers College Joiner — ceramides trending, sensitive skin from over-treatment.
+- Beauty Elites — combination skin management.
+
+FORMAT GRAVITY:
+- Patches → Trend Seekers College Joiner primary.
+- Multifunctional / fewer steps → Beauty Elites Moms primary.
+- Simple accessible serum (acne + glow) → Mindful Evaluators primary (first switch moment opportunity).
+- Premium treatment serum → Informed Upgraders or Beauty Elites.
+- Naturals-heavy serum at mass price → Mindful Evaluators primary, Ritual Seekers experimental target.
+- Lip care → Informed Upgraders primary.
+- Sunscreen → Beauty Elites primary, Informed Upgraders secondary.
+- Face wash mass naturals → Ritual Seekers primary.
+- Face wash dual-action (acne + even tone) → Mindful Evaluators primary (makes FW hero again).
+- Ayurvedic PM repair → Beauty Elites PM slot.
+- Apply-and-sleep → Beauty Elites Moms (PM recovery window).
+
+PRICE GRAVITY:
+- Under Rs 150 → Ritual Seekers or Affordability Aspirers or Mindful Evaluators mass end.
+- Rs 150-350 → Mindful Evaluators or Trend Seekers College Joiner.
+- Rs 350-800 → Informed Upgraders or Beauty Elites entry.
+- Rs 800+ → Beauty Elites primary.
+
+TAM TIEBREAKER — only when signal alignment truly equal:
+Ritual Seekers Rs 4800 cr > Beauty Elites Rs 3705 cr > Mindful Evaluators Rs 1250 cr > Informed Upgraders Rs 863 cr > Affordability Aspirers Rs 420 cr > Trend Seekers Rs 352 cr
+
+Lifecycle: Trend Seekers → Informed Upgraders → Beauty Elites (A1). Affordability Aspirers → Mindful Evaluators → Ritual Seekers (A2+B). Brand that wins a teen keeps her 10+ years.
+
+
+---
+
+REGIONAL LAUNCH RECOMMENDATION MODULE
+
+When recommending launch city, always reason through the specific cohort matched + product benefits + city character together. Never recommend based on a single dimension.
+
+CORE REASONING RULE:
+Match: (product emotional job + benefits) × (cohort's dominant characteristics) → city where BOTH align strongest.
+A naturals face wash for Ritual Seekers → find the city where Ritual Seeker characteristics AND naturals/traditional beauty behaviour are BOTH highest. That is not Mumbai (career-driven, low ritual, low naturals affinity). That is Chennai or Kolkata.
+
+---
+
+DELHI — Character Profile
+Status and appearance = primary social currency. Highest appearance pressure, social visibility, luxury display, experimental behaviour. Low price sensitivity. Highest effective disposable income. Moderate career focus. Retains traditional roots (astrology, arranged marriage) but not conservative in beauty choices.
+Skincare search character: Leads in glass skin, Korean skincare, retinol, self-care, Sephora. High K-drama influence. Low ayurvedic and natural beauty search. Low dermatologist search — she goes by trend and social proof.
+What this means for products:
+→ Premium, trend-led, K-beauty adjacent, aspirational formats (patches, serums, glass skin claims) land here first and hardest
+→ Status-signalling packaging + premium price works — she pays for products that signal she takes care of herself
+→ Anti-ageing + appearance pressure combination = strong Beauty Elites market
+→ Low wellness/ayurvedic interest = NOT the city for home-remedy adjacent or purely natural positioning
+→ High experimental behaviour = fastest trial for new formats
+→ Arranged marriage + pregnancy searches = Beauty Elites Moms cohort is active here
+Best for: Trend Seekers (College Joiner), Beauty Elites (Without Kids), Informed Upgraders, premium serums, K-beauty formats, glass skin claims, retinol/actives products
+
+---
+
+MUMBAI — Character Profile
+Career = primary identity. Highest career focus, experimental behaviour, global trend adoption. Zero ritual orientation, zero family orientation — most independent consumer. Moderate beauty involvement — beauty competes with career and social life. Confidence and productivity are top markers, not appearance pressure. Disposable income present but compressed by high cost of living — spends selectively on things that genuinely solve problems efficiently.
+Skincare search character: Leads in sunscreen. Korean skincare high. Moderate anti-ageing. Low skin whitening — moved beyond fairness narratives. Low dermatologist search — self-researches online. Low glass skin obsession vs Delhi.
+What this means for products:
+→ Time scarcity drives multifunctional demand — strongest market for 2-in-1, fewer steps, faster routine. Beauty Elites Moms here are most time-compressed.
+→ High experimental behaviour + problem-solving framing needed (unlike Delhi where trend alone drives trial)
+→ Compressed disposable income = premium acceptable ONLY with clear VFM proof
+→ Highest sunscreen awareness — sunscreen with functional claims (anti-ageing, non-comedogenic, sweat-proof) lands best here
+→ Confidence + self-investment framing works ("skin that works for your career")
+→ Low ritual orientation = ayurvedic and naturals-only products face resistance. Needs science-led or hybrid positioning.
+→ MBA + LinkedIn + career searches = first salary upgrade moment for Informed Upgraders very active here
+Best for: Beauty Elites Moms (multifunctional), Informed Upgraders (career milestone + VFM), Skin Strategist-adjacent products, sunscreen, hybrid natural+science, multifunctional formats. NOT for: pure naturals, home-remedy adjacent, purely ayurvedic, Ritual Seekers products
+
+---
+
+CHENNAI — Character Profile
+Most conservative, ritual-oriented, family-driven city. Meaningful disposable income (second highest effective) but high price sensitivity — deliberate not impulsive spender. Lowest experimental behaviour and global trend adoption — adopts slowly through trusted channels. Dermatologist searches HIGHEST of all four cities — trusts clinical authority most. Family orientation and ritual orientation highest. Low appearance pressure — beauty is not primary social currency but skin health and cleanliness matter deeply.
+Skincare search character: Leads in dermatologist, skin whitening, natural beauty, self-care, wellness. Zero glass skin, zero Korean skincare. Hair growth high. Bridal makeup high. Temple proximity = daily ritual identity.
+What this means for products:
+→ Dermat-endorsed or dermat-tested claims are the single strongest credibility signal here — more than any other city
+→ Conservative + low experimental = last to try new formats and brands. Trusted brand extension (new Himalaya SKU) is most reliable trial mechanism.
+→ High disposable income but high price sensitivity = has money but interrogates value deeply. Proof before spending.
+→ Ritual Seekers cohort is MOST naturally at home here — home remedy adjacent, traditional naturals, family-oriented, safety-first
+→ Skin whitening highest = fairness and brightness narrative resonates strongly (unlike Mumbai). Turmeric, fairness, glow claims work.
+→ Low K-beauty/trend interest = K-beauty positioning will fail. Local cultural anchoring (sandalwood, turmeric, kumkumadi, neem) works.
+→ High work-life balance + therapy searches = stress-skin connection has unique resonance. Calming/soothing benefit claims land here.
+→ Bridal + government jobs = two distinct purchase occasions: bridal preparation (big spend event) and stable income lifestyle.
+Best for: Ritual Seekers (strongest natural home), Affordability Aspirers (mother-gatekeeper dynamic strongest), Beauty Elites Moms (dermat-trusted, family-stage), naturals face washes, traditional ingredient products, dermat-endorsed products, skin whitening/brightening at accessible price. NOT for: K-beauty, premium trend-led, experimental formats
+
+---
+
+KOLKATA — Character Profile
+Most price-sensitive city but paradoxically second-highest effective disposable income — has money but spending is a deep cultural identity statement, not impulsive. Zero career focus, zero experimental behaviour — least career-driven, least likely to try new products without strong social proof. High conservatism, strong ritual orientation, strong family orientation. Anti-ageing, glass skin, glow skin, natural beauty, self-care search indices are HIGHEST here — massive latent demand for skincare but low conversion because experimental behaviour is zero.
+Skincare search character: LEADS in anti-ageing, glass skin, glow skin, natural beauty, sunscreen, self-care. High gold jewellery, bridal makeup, arranged marriage. Moderate dermatologist. High feminism + astrology simultaneously.
+What this means for products:
+→ Highest anti-ageing + glow + natural beauty searches but zero experimental behaviour = LATENT DEMAND market. She thinks about these things but hasn't found products she trusts enough to try. Removing trial risk unlocks significant demand.
+→ High disposable income + high price sensitivity = will spend when truly convinced of value. Not on trend, not on status — on genuine benefit from trusted source.
+→ Zero experimental behaviour = trusted brand extension is MANDATORY for first trial. Himalaya's strongest advantage is here — she already trusts it and will try a new Himalaya SKU before any new brand.
+→ High natural beauty + traditional home remedy culture = ayurvedic and naturals-heavy positioning lands powerfully. "Home remedy in a bottle" framing works best of all cities.
+→ High feminism + confidence searches + gold jewellery = strong self-identity through tradition, not trend.
+→ High sunscreen searches despite price sensitivity = sunscreen awareness exists but purchase barrier is "feels wasteful in heat." Reframing sunscreen value has specific Kolkata opportunity.
+→ Bridal + arranged marriage + gold = marriage-occasion spend is real.
+→ Zero career focus = time is NOT scarce. Multi-step routines are viable. Has patience for premium ayurveda's delayed results (unlike Mumbai Moms).
+Best for: Ritual Seekers (latent demand + naturals + trusted brand pathway), Affordability Aspirers, anti-ageing products (highest search intent of all cities), naturals-heavy serums (experimental category entry through trusted brand), ayurvedic products, home-remedy-adjacent, glass skin/glow products. NOT for: new brand launches, trend-led formats, experimental actives
+
+---
+
+SHARP CITY SELECTION RULES — apply these directly:
+
+FOR RITUAL SEEKERS PRODUCTS (naturals FW, turmeric, neem, aloe, home-remedy adjacent):
+→ Primary: Chennai (highest ritual orientation + natural beauty + trusted brand dynamics + dermat credibility if needed)
+→ Secondary: Kolkata (highest latent demand + naturals affinity + Himalaya trust advantage)
+→ Mumbai = wrong (low ritual, low naturals, career-driven, will not respond to traditional naturals positioning)
+→ Delhi = wrong (low natural beauty interest, status/trend driven not naturals driven)
+
+FOR MINDFUL EVALUATORS PRODUCTS (accessible actives, glow serums, dual-action FW):
+→ Primary: Mumbai (career + aspiration + experimental) or Delhi (appearance pressure + experimental)
+→ Secondary: depends on price. If masstige: Delhi primary. If accessible: Chennai Mindful Evaluator sub-segment.
+
+FOR BEAUTY ELITES PRODUCTS (premium serums, anti-ageing, multifunctional):
+→ Multifunctional/time-saving: Mumbai primary (most time-scarce)
+→ Anti-ageing/premium ayurveda: Kolkata primary (highest anti-ageing search + latent demand + Himalaya trust), Delhi secondary (appearance pressure)
+→ Hydration-led premium FW: Delhi primary (highest appearance investment)
+
+FOR INFORMED UPGRADERS PRODUCTS (treatment serums, Vit C/Niacinamide, post-acne):
+→ Primary: Delhi (glass skin + retinol + Korean skincare lead) or Mumbai (career + first salary + VFM)
+→ Secondary: Mumbai or Delhi depending on product
+
+FOR TREND SEEKERS PRODUCTS (patches, K-beauty, glass skin, trendy formats):
+→ Primary: Delhi (K-drama highest, Korean skincare highest, glass skin highest, aspirational)
+→ Secondary: Mumbai (experimental behaviour + global trend adoption)
+→ Chennai and Kolkata = wrong for K-beauty/trend products
+
+FOR NATURALS-HEAVY SERUMS (turmeric serum, aloe serum, ayurvedic serums):
+→ Primary: Kolkata (highest natural beauty search + latent demand + zero experimental but Himalaya trust lowers barrier)
+→ Secondary: Chennai (ritual orientation + natural beauty + conservative = familiar naturals positioning works)
+→ Delhi/Mumbai = wrong (naturals-only serums don't match their product expectations)
+
+FOR SUNSCREEN (any variant):
+→ Primary: Mumbai (highest sunscreen search, career-driven UV awareness, non-comedogenic matters)
+→ Secondary: Delhi (appearance pressure, anti-ageing + UV combination claim)
+→ Kolkata: reframing opportunity ("curates the sun") but requires category education
+
+FOR ANTI-AGEING FACE WASH (turmeric/aloe/neem claiming young-looking):
+→ Primary: Chennai (Ritual Seekers strongest here, expects FW to deliver anti-ageing, naturals trust)
+→ Secondary: Kolkata (highest anti-ageing search + naturals affinity + latent demand)
+→ Mumbai/Delhi = wrong (they want separate dedicated anti-ageing serums, not FW claims)
+
+
+---
+
+DOMINANT SOLUTIONS BY ISSUE — PER COHORT
+Use this to validate format and brand-type readiness. When a product targets a specific issue, cross-reference here to confirm which cohort actually uses that format for that issue. Brand names indicate openness level (dermat brand = clinical acceptance, home remedy = naturals-only, D2C serum = actives literacy).
+
+ACNE/PIMPLES:
+- Trend Seekers (A1 <20): Pimple patches (Furr, NUA), dermat-prescribed FW (Ahaglow/Cetaphil), turmeric-milk home remedy. Open to dermat brands ONLY when acne is a crisis. Patches are primary reactive format.
+- Affordability Aspirers (A2+B <20): Multani mitti, besan-haldi paste. Very little branded treatment. Mother uses Himalaya Neem FW. No actives, no serums.
+- Informed Upgraders (A1 21-25): Minimalist Salicylic Acid serum. Switched to non-foaming/dermat-tested gentle FW (Cetaphil). Highest format sophistication.
+- Mindful Evaluators (A2+B 21-25): Himalaya Neem FW. Tried serums (Derma Co) but NOT retained — reactive trial not sustained use. Key signal: serum trial happens but drops.
+- Beauty Elites (A1 25+): Dermat products. Salicylic acid serums. Cetaphil FW. Ayurveda users: Kama Kumkumadi Serum PM. Full clinical + premium naturals stack.
+- Ritual Seekers (A2+B 25+): Besan, haldi, neem home remedies. Himalaya Neem FW. NO actives whatsoever.
+
+DRYNESS:
+- Trend Seekers: Vaseline moisturiser, aloe vera gel, Korean ceramides (trending). Basic to K-beauty bridge.
+- Affordability Aspirers: Mother's Pond's cold cream. No independent solution — entirely dependent on mother.
+- Informed Upgraders: Changed FW format to gel/hydrating (Pond's Hydra Gel, Nivea Milk Delight). HA moisturiser (L'Oreal HA, Neutrogena). Proactive format change.
+- Mindful Evaluators: Nivea Soft cream as primary fix. Basic moisturiser, no format sophistication.
+- Beauty Elites: Pond's Hydra Gel FW as dominant hydrating step. Carries moisturiser for midday reapplication. HA serum (Lakme, Neutrogena) at night. Most sophisticated hydration stack.
+- Ritual Seekers: Aloe home remedy. Pond's cold cream. No HA or serum. Naturals + legacy brand only.
+
+PIGMENTATION/MARKS:
+- Trend Seekers: Vitamin C serum at trial level (Garnier). Rice water home remedy (Instagram-sourced). Entry-level aspiration, not clinical.
+- Affordability Aspirers: Mother's Pond's/Garnier fairness cream. Besan-haldi pack. No clinical treatment.
+- Informed Upgraders: Vit C serum (Minimalist, Dot & Key, Pilgrim) + Niacinamide serum. Specifically mapped to concern. Dermat consulted if severe. Most targeted treatment approach.
+- Mindful Evaluators: Garnier Vit C serum for GLOW framing, not clinical correction. Turmeric home remedy. Key distinction: she buys for glow aspiration, not marks treatment.
+- Beauty Elites: Vit C + Niacinamide serums (Minimalist, Dot & Key). Dermat consulted for severe cases. Ayurveda: Forest Essentials Kumkumadi Night Cream. Premium + clinical dual stack.
+- Ritual Seekers: Turmeric-milk paste, besan pack. No branded treatment. Purely home remedy.
+
+DULLNESS/GLOW:
+- Trend Seekers: Rice water (Instagram), Vit C serum, sheet masks. Trend-led formats.
+- Affordability Aspirers: Besan-haldi pack. Fairness cream (Pond's/Garnier) aspirationally. Aspiration without clinical intent.
+- Informed Upgraders: Weekly face pack (Foxtale, Lakme sheet mask, Laneige occasionally). Scrub (St. Ives/Plum). Micellar cleanse. Most complete glow routine.
+- Mindful Evaluators: Garnier Vit C serum. Everyuth scrub. Turmeric DIY. Budget-led mix of actives + home remedy.
+- Beauty Elites: Loreal/Laneige sheet mask. Vit C serum AM. Premium formats.
+- Ritual Seekers: Turmeric paste, multani mitti. Everyuth/Himalaya scrub. Home remedy + mass brand scrub.
+
+OILINESS:
+- Trend Seekers: Clean & Clear FW (anti-oil claim). Blotting papers via K-beauty influence. Simple + trendy.
+- Affordability Aspirers: Himalaya Neem FW (mother-selected). Multani mitti. Mother-driven solution.
+- Informed Upgraders: Gel-format FW. Niacinamide/Salicylic serum (Minimalist, The Ordinary, Pilgrim). Most targeted oil-control stack.
+- Mindful Evaluators: Himalaya FW for oil control. Pears soap alternative. Basic, not sophisticated.
+- Beauty Elites: Pond's Hydra Gel (oil-control + hydration combo). Niacinamide serum. Balanced approach.
+- Ritual Seekers: Himalaya Neem/Tea Tree FW. Multani mitti. Legacy brand + home remedy.
+
+SUN DAMAGE/TAN:
+- Trend Seekers: Inconsistent — past breakouts make her avoid sunscreen. When forced: Derma Co, Cetaphil. Non-comedogenic is non-negotiable for her to even try.
+- Affordability Aspirers: NO sunscreen. Rose water for cooling. Category not entered.
+- Informed Upgraders: Aqualogica/Dot&Key/Derma Co DAILY despite white cast complaints. Committed category user. Sensory issues exist but don't stop usage.
+- Mindful Evaluators: Sunscreen less dominant than Informed Upgraders. When used: Aqualogica (social media triggered). Inconsistent user.
+- Beauty Elites: Neutrogena, LA Shield. White cast and heavy textures still barrier for many. Committed but unsatisfied — this is the biggest open gap.
+- Ritual Seekers: Rose water in summer for sun heat. Wrong benefit association (tan prevention not UV protection). Category education problem.
+
+FINE LINES/AGEING:
+- Trend Seekers: NOT a concern. No product action.
+- Affordability Aspirers: NOT a concern. No product action.
+- Informed Upgraders: NOT a concern currently. No product action. (Future anxiety exists but no purchase behaviour.)
+- Mindful Evaluators: Mentions anxiously but NO product action. Aspiration without purchase.
+- Beauty Elites: Retinol + collagen. HA serum PM. Night cream. Dermat consulted. Full anti-ageing stack.
+- Ritual Seekers: Expects FW to deliver anti-ageing (63%). Won't buy separate product. Face wash claim is the only access point.
+
+DERMAT BRAND OPENNESS (from dominant solutions data):
+- Beauty Elites (A1 25+): HIGHEST — dermat-prescribed products are default for skin issues, consulted proactively
+- Informed Upgraders (A1 21-25): HIGH — dermat normalised for specific concerns, dermat-tested FW preferred
+- Trend Seekers (A1 <20): MODERATE — dermat brand trusted only during active crisis (acne peak). Otherwise household or trending brands.
+- Mindful Evaluators (A2+B 21-25): LOW — tries dermat-adjacent brands reactively but doesn't retain them (Derma Co tried, not kept)
+- Affordability Aspirers (A2+B <20): VERY LOW — no dermat access, mother-driven choices, no clinical awareness
+- Ritual Seekers (A2+B 25+): ZERO — home remedies are the backbone, no openness to clinical/dermat brands
+
+KEY MATCHING RULES FROM THIS DATA:
+1. For a dermat brand lineup: Beauty Elites primary, Informed Upgraders secondary. Trend Seekers only for acute acne products (patches, crisis-moment format).
+2. Acne serum: Informed Upgraders primary (Salicylic Acid serum is their dominant acne solution). Trend Seekers as experimental (they use patches not serums for acne, but acne is their #1 issue — the right serum format can work).
+3. Sunscreen: Informed Upgraders are daily committed users despite imperfect products. Beauty Elites are committed but most unsatisfied — biggest upgrade opportunity. Both are valid primary depending on product angle (better texture = Beauty Elites primary, better formulation = Informed Upgraders).
+4. Anti-ageing SERUM or CREAM (dedicated treatment product): Beauty Elites ONLY. No other cohort takes product action for anti-ageing in treatment format.
+5. Anti-ageing CLAIM in FACE WASH format: Ritual Seekers PRIMARY. She expects her face wash to deliver anti-ageing and will NOT add a separate product. Beauty Elites are secondary here — they have dedicated serums for anti-ageing, so a face wash anti-ageing claim is a nice-to-have not a primary driver. These two rules are OPPOSITE by format — do not conflate them.
+6. HA/hydration serum: Beauty Elites primary (carries moisturiser for reapplication — active unmet need). Informed Upgraders secondary (proactively switched FW format for dryness).
+7. Pigmentation serum: Informed Upgraders primary (most targeted clinical approach, Dermat consulted). Beauty Elites secondary (also clinical but using it — less urgency).
+8. Mindful Evaluators on serums: She TRIES actives reactively but DROPS them. Any serum targeting her must be framed for aspiration (glow, even tone) not clinical treatment — and must be affordable + simple enough to not require discipline.
+9. Ritual Seekers on pigmentation: Home remedies (turmeric-milk, besan pack) are dominant. NO branded actives whatsoever. She uses branded FW (Himalaya Neem) and scrubs (Everyuth/Himalaya) but these are for cleansing/exfoliation not pigmentation treatment. For pigmentation specifically, turmeric claim in a trusted branded FW or a FW-adjacent format is the only branded entry point.
+
+
+---
+
+FORMAT BARRIER REASONING — CRITICAL
+
+Format is NEVER a hard veto for experimental target. Format is a soft barrier that can be lowered by strong enough alignment on other factors (skin issue relevance, ingredient ideology, benefit need, price). Apply this logic:
+
+HARD BARRIERS (these DO eliminate a cohort — not format-based, ideology-based):
+- Chemical fear + actives-led synthetic formulation → eliminates Ritual Seekers and Affordability Aspirers from actives-led products. NOT because of serum format but because chemical fear is ideological. EXCEPTION: if the serum is naturals-heavy (turmeric, aloe, neem dominant with no synthetic actives on front of pack), chemical fear is lowered enough for experimental target.
+- Mother gatekeeping → eliminates Affordability Aspirers from anything mother would reject (synthetic actives, unfamiliar brands, above Rs 150).
+- Budget ceiling → eliminates cohorts where price structurally exceeds their ceiling (Ritual Seekers above Rs 200, Affordability Aspirers above Rs 150).
+- No skin issue relevance → if a cohort genuinely does not have the problem this product solves AND has no aspirational pull toward the benefit, eliminate them.
+
+SOFT BARRIERS (format preference — experimental target logic applies):
+- Serum format for Mindful Evaluators: they TRY serums reactively but don't retain. Soft barrier. Strong benefit-need alignment (especially glow/even tone, their top aspiration) + familiar natural ingredient + accessible price = valid experimental target with adoption barrier "low routine discipline, reactive not sustained use."
+- Serum format for Ritual Seekers: they don't use serums in dominant solutions. BUT — naturals-heavy serums (turmeric, aloe, neem) specifically lower the chemical fear barrier. Valid experimental target when: ingredient = familiar naturals + price = mass + brand = trusted (Himalaya). Adoption barrier: "serum format unfamiliar + chemical anxiety." Conversion condition: "positioned as home remedy in a bottle at kirana price from trusted brand."
+- Serum format for Trend Seekers (College Joiner): they DO use serums (Vit C is their entry serum). The barrier is not serum format — it's which concern the serum addresses. Acne serum = valid experimental (acne is identity crisis, they use patches for acne but a serum claiming non-comedogenic + acne control can work). Clinical/anti-ageing serum = not relevant (not their concern or life stage).
+- Sunscreen for Ritual Seekers: category education barrier, not format barrier. If reframed as "curates the sun's goodness while blocking UV" = valid experimental.
+- Premium price for Mindful Evaluators: soft barrier if the product is strongly differentiated. If benefit-need match is very strong, can be experimental with adoption barrier "budget ceiling."
+
+SERUM HIERARCHY BY COHORT:
+- Beauty Elites: Full serum routine, multiple serums, highest format acceptance. Primary for any serum.
+- Informed Upgraders: Active serum users, mapped to specific concerns. Primary or secondary for treatment serums.
+- Trend Seekers (College Joiner): Uses Vit C serum as entry. Open to trending actives serums (ceramides, zinc PCA). Experimental for acne serums specifically.
+- Mindful Evaluators: Tries serums reactively, drops them. Experimental for accessible, aspiration-framed serums only.
+- Ritual Seekers: No serum use. Experimental ONLY if naturals-heavy + mass price + trusted brand. Never primary.
+- Affordability Aspirers: Negligible serum use due to chemical fear and mother gatekeeping. Almost never experimental unless product is 100% naturals + sachet format + explicitly not "chemical."
+- Trend Seekers (School Girlie): Not open to actives at this stage. Not experimental for serums.
+
+APPLYING THIS: For "turmeric serum" —
+Step 1: Turmeric = brightening + even skin tone + anti-inflammatory. Serum format.
+Step 2: Hard barrier check. Ritual Seekers: chemical fear? Turmeric = naturals, not chemical. Chemical fear barrier lowered. Price check needed. Budget eliminates if above Rs 200.
+Step 3: Gravity match. Mindful Evaluators: even skin tone is #1 aspiration (67%), actives openness ~50%, turmeric is familiar natural. Strong multi-factor match. Primary.
+Step 4: Experimental target. Ritual Seekers: turmeric is her ingredient (78% preference), brightening is her aspiration, this specific ingredient lowers chemical fear. Valid experimental target. Not primary because serum format is unfamiliar + she would need significant positioning effort.
+Result: Mindful Evaluators primary, Ritual Seekers experimental. Correct.
+
+---
+
+OUTPUT — Respond ONLY in valid JSON. No text outside JSON. No markdown. No preamble.
+
+{"primary":{"cohort":"cohort name","sub_segment":"sub-segment if applicable else null","sec_age":"SEC X | Age Y","tam":"Rs Xcr","reasons":["reason grounded in benefit-need match and cohort gravity — cite specific benefit and specific need statistic","reason showing format readiness","reason showing no structural adoption barrier"],"product_tweaks":["specific formulation/format/packaging/claim change — most impactful first","tweak 2","tweak 3","tweak 4"]},"experimental_target":{"cohort":"cohort name","sub_segment":"sub-segment if applicable else null","sec_age":"SEC X | Age Y","tam":"Rs Xcr","reasons":["reason showing ingredient/benefit affinity despite barrier","reason 2","reason 3"],"adoption_barrier":"The specific structural barrier preventing this cohort from being primary","conversion_condition":"The specific thing that would need to be true (positioning, price, format, claim) to convert this experimental target","product_tweaks":["tweak 1","tweak 2","tweak 3"]},"himalaya_playbook":{"non_negotiables":["non-negotiable from primary cohort","non-negotiable 2 if exists"],"common_ground":["product change serving BOTH primary and experimental target simultaneously","common ground 2","common ground 3","common ground 4"]},"regional_launch":{"primary_city":"city name","primary_city_reason":"2-3 sentences on why this city has strongest enabling conditions for this product + cohort","secondary_city":"city name","secondary_city_reason":"2-3 sentences","city_ranking":["1st — one line reason","2nd — one line reason","3rd — one line reason","4th — one line reason"]}}`;
+
+function fillExample(t){document.getElementById("productInput").value=t;document.getElementById("productInput").focus()}
+
+// Reliability wrapper: 2 auto-retries with exponential backoff for any 5xx / network failure.
+// Per-attempt timeout = 4 min (cohort analysis with big prompt + big JSON can take a while).
+// User only sees an error if all 3 attempts fail.
+async function fetchWithRetry(url, options, opts){
+  const maxRetries = (opts && opts.maxRetries) != null ? opts.maxRetries : 2;
+  const timeoutMs  = (opts && opts.timeoutMs)  != null ? opts.timeoutMs  : 240000;
+  let lastError;
+  for(let attempt = 0; attempt <= maxRetries; attempt++){
+    if(attempt > 0){
+      // Backoff: 1.5s, then 4s
+      await new Promise(r => setTimeout(r, attempt === 1 ? 1500 : 4000));
+    }
+    const controller = new AbortController();
+    const tid = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const resp = await fetch(url, Object.assign({}, options, { signal: controller.signal }));
+      clearTimeout(tid);
+      // 5xx = transient → retry. 4xx = client error → return as-is (don't retry).
+      if(resp.status >= 500 && resp.status <= 599 && attempt < maxRetries){
+        lastError = new Error("Server error " + resp.status);
+        continue;
+      }
+      return resp;
+    } catch(e){
+      clearTimeout(tid);
+      lastError = (e && e.name === "AbortError")
+        ? new Error("Request timed out — model is taking too long. Try a shorter description.")
+        : e;
+      if(attempt === maxRetries) throw lastError;
+    }
+  }
+  throw lastError || new Error("Request failed after retries");
+}
+
+async function analyseProduct(){
+  const input=document.getElementById("productInput").value.trim();
+  if(!input)return;
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true;
+  document.getElementById("loading").classList.add("visible");
+  document.getElementById("results").classList.remove("visible");
+  document.getElementById("errorBox").classList.remove("visible");
+  document.getElementById("playbookCard").style.display="none";
+  document.getElementById("regionalCard").style.display="none";
+  try{
+    const response=await fetchWithRetry("/api/cohort",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({product:input,sp:SYSTEM_PROMPT})
+    });
+    if(!response.ok){const t=await response.text();let em;try{em=JSON.parse(t)?.error;}catch{}throw new Error(em||"API error "+response.status);}
+    const data=await response.json();
+    const raw=data.text||"";
+    console.log("RAW RESPONSE:", raw);
+    // Strip thinking blocks, markdown fences, control characters, and any preamble
+    let cleaned=raw.replace(/<think>[\s\S]*?<\/think>/gi,"");
+    cleaned=cleaned.replace(/```json/gi,"").replace(/```/g,"").replace(/[\u0000-\u001F\u007F-\u009F]/g," ").trim();
+    // Find the last { to } block (most complete JSON)
+    const jsonStart=cleaned.indexOf("{");
+    const jsonEnd=cleaned.lastIndexOf("}");
+    if(jsonStart===-1||jsonEnd===-1||jsonEnd<jsonStart){
+      console.log("CLEANED:",cleaned);
+      throw new Error("Could not parse response. Please try again.");
+    }
+    const jsonStr=cleaned.slice(jsonStart,jsonEnd+1);
+    let parsed;
+    try {
+      parsed = JSON.parse(jsonStr);
+    } catch(parseErr) {
+      // Claude sometimes returns unescaped newlines or quotes inside JSON strings
+      // Fix by cleaning the string values
+      try {
+        const reFixed = jsonStr.replace(/\n/g," ").replace(/\r/g," ").replace(/\t/g," ");
+        parsed = JSON.parse(reFixed);
+      } catch(e2) {
+        console.error("RAW:", raw);
+        throw new Error("Parse failed — try a shorter product description");
+      }
+    }
+    renderResults(input,parsed);
+  }catch(err){
+    document.getElementById("errorText").textContent="Error: "+err.message;
+    document.getElementById("errorBox").classList.add("visible");
+  }finally{
+    document.getElementById("loading").classList.remove("visible");
+    btn.disabled=false;
+  }
+}
+
+function renderResults(input,data){
+  document.getElementById("resultProduct").textContent=input.length>100?input.slice(0,100)+"...":input;
+  const pName = data.primary.sub_segment ? data.primary.cohort + " — " + data.primary.sub_segment : data.primary.cohort;
+  const expData = (data && (data.experimental_target || data.secondary)) || {};
+  const sName = expData.sub_segment ? expData.cohort + " — " + expData.sub_segment : (expData.cohort || "-");
+  document.getElementById("primaryName").textContent=pName;
+  document.getElementById("primarySecAge").textContent=data.primary.sec_age;
+  document.getElementById("primaryTam").textContent="Market value "+data.primary.tam;
+  const pR=document.getElementById("primaryReasons");pR.innerHTML="";
+  (data.primary.reasons||[]).forEach(r=>{pR.innerHTML+=`<li><span class="reason-dot"></span><span>${r}</span></li>`});
+  // Primary tweaks
+  const pTweaks = document.getElementById("primaryTweaks");
+  const pTweaksLabel = document.getElementById("primaryTweaksLabel");
+  pTweaks.innerHTML="";
+  if(data.primary.product_tweaks && data.primary.product_tweaks.length){
+    pTweaksLabel.style.display="block";
+    data.primary.product_tweaks.forEach(t=>{pTweaks.innerHTML+=`<li><span class="tweak-dot"></span><span>${t}</span></li>`});
+  } else { pTweaksLabel.style.display="none"; }
+  document.getElementById("secondaryName").textContent=sName||"-";
+  document.getElementById("secondarySecAge").textContent=expData.sec_age||"-";
+  document.getElementById("secondaryTam").textContent=expData.tam?"Market value "+expData.tam:"-";
+  const sR=document.getElementById("secondaryReasons");sR.innerHTML="";
+  (expData.reasons||[]).forEach(r=>{sR.innerHTML+=`<li><span class="reason-dot"></span><span>${r}</span></li>`});
+  document.getElementById("whySecondary").textContent=expData.adoption_barrier||(expData.why_secondary_not_primary||"");
+  document.getElementById("conversionCondition").textContent=expData.conversion_condition||"";;
+  // Secondary tweaks
+  const sTweaks = document.getElementById("secondaryTweaks");
+  const sTweaksLabel = document.getElementById("secondaryTweaksLabel");
+  sTweaks.innerHTML="";
+  if(expData.product_tweaks && expData.product_tweaks.length){
+    sTweaksLabel.style.display="block";
+    expData.product_tweaks.forEach(t=>{sTweaks.innerHTML+=`<li><span class="tweak-dot"></span><span>${t}</span></li>`});
+  } else { sTweaksLabel.style.display="none"; }
+
+  // Himalaya playbook
+  const pbCard = document.getElementById("playbookCard");
+  if(data.himalaya_playbook){
+    const nn = document.getElementById("playbookNonNeg");
+    const cg = document.getElementById("playbookCommon");
+    nn.innerHTML="";cg.innerHTML="";
+    (data.himalaya_playbook.non_negotiables||[]).forEach(n=>{nn.innerHTML+=`<li><span class="playbook-dot-orange"></span><span>${n}</span></li>`});
+    (data.himalaya_playbook.common_ground||[]).forEach(c=>{cg.innerHTML+=`<li><span class="playbook-dot-white"></span><span>${c}</span></li>`});
+    pbCard.style.display="block";
+  } else {pbCard.style.display="none";}
+  // Regional launch
+  const regCard = document.getElementById("regionalCard");
+  if(data.regional_launch){
+    document.getElementById("regionalPrimaryCity").textContent=data.regional_launch.primary_city||"-";
+    document.getElementById("regionalPrimaryReason").textContent=data.regional_launch.primary_city_reason||"";
+    document.getElementById("regionalSecondaryCity").textContent=data.regional_launch.secondary_city||"-";
+    document.getElementById("regionalSecondaryReason").textContent=data.regional_launch.secondary_city_reason||"";
+    const rr=document.getElementById("regionalRanking");rr.innerHTML="";
+    (data.regional_launch.city_ranking||[]).forEach((r,i)=>{
+      rr.innerHTML+=`<li style="font-size:11px;color:var(--text-light);font-weight:300;display:flex;gap:8px;align-items:flex-start;"><span style="width:16px;height:16px;border-radius:50%;background:var(--green-dark);color:white;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;">${i+1}</span><span>${r}</span></li>`;
+    });
+    regCard.style.display="block";
+  } else {regCard.style.display="none";}
+  document.getElementById("results").classList.add("visible");
+  document.getElementById("results").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+document.getElementById("productInput").addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&(e.metaKey||e.ctrlKey))analyseProduct();
+});
+
+async function exploreFuture(){
+  const input=document.getElementById("futureInput").value.trim();
+  if(!input)return;
+  const btn=document.getElementById("futureBtn");
+  btn.disabled=true;
+  document.getElementById("futureLoading").style.display="flex";
+  document.getElementById("futureResults").style.display="none";
+  document.getElementById("futureError").style.display="none";
+  try{
+    const response=await fetchWithRetry("/api/future",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({query:input,sp:FUTURE_PROMPT})
+    });
+    if(!response.ok){const t=await response.text();let em;try{em=JSON.parse(t)?.error;}catch{}throw new Error(em||"API error "+response.status);}
+    const data=await response.json();
+    const raw=data.text||"";
+    let cleaned=raw.replace(/<think>[\s\S]*?<\/think>/gi,"").replace(/```json/gi,"").replace(/```/g,"").replace(/[\u0000-\u001F\u007F-\u009F]/g,' ').trim();
+    const jsonStart=cleaned.indexOf("{");
+    const jsonEnd=cleaned.lastIndexOf("}");
+    if(jsonStart===-1||jsonEnd===-1)throw new Error("Could not parse response. Please try again.");
+    const parsed=JSON.parse(cleaned.slice(jsonStart,jsonEnd+1));
+    document.getElementById("futureCohortName").textContent=(parsed.future_cohort||"-")+" · "+(parsed.time_horizon||"");
+    document.getElementById("futureCityName").textContent=(parsed.city||"-")+" · From: "+(parsed.current_cohort||"");
+    const td=document.getElementById("futureTransitionDrivers");td.innerHTML="";
+    (parsed.transition_drivers||[]).forEach(d=>{td.innerHTML+=`<li style="font-size:12px;line-height:1.55;font-weight:300;color:rgba(255,255,255,.8);display:flex;gap:8px;align-items:flex-start;"><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4);margin-top:6px;flex-shrink:0;"></span><span>${d}</span></li>`;});
+    const fn=document.getElementById("futureNeeds");fn.innerHTML="";
+    (parsed.emerging_needs||[]).forEach(n=>{fn.innerHTML+=`<li style="font-size:12px;line-height:1.55;font-weight:300;color:rgba(255,255,255,.88);display:flex;gap:8px;align-items:flex-start;"><span style="width:4px;height:4px;border-radius:50%;background:var(--orange);margin-top:6px;flex-shrink:0;"></span><span>${n}</span></li>`;});
+    // City dynamics
+    let cdEl = document.getElementById("futureCityDynamics");
+    if(!cdEl){
+      const cdParent = document.getElementById("futureNeeds").parentElement;
+      const lbl = document.createElement("div");lbl.style.cssText="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:6px;font-weight:500;margin-top:14px;";lbl.textContent="City dynamics";
+      cdEl=document.createElement("p");cdEl.id="futureCityDynamics";cdEl.style.cssText="font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;font-weight:300;margin-bottom:14px;";
+      cdParent.appendChild(lbl);cdParent.appendChild(cdEl);
+    }
+    cdEl.textContent=parsed.city_dynamics||"";
+    // Ingredient opportunities
+    const io = document.getElementById("futureTransitionDrivers").closest("div").parentElement;
+    let ioSection = document.getElementById("futureIngredients");
+    if(!ioSection){
+      const label = document.createElement("div");
+      label.style.cssText="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:500;margin-top:16px;";
+      label.textContent="Trending ingredients + Himalaya pairing";
+      const ul = document.createElement("ul");
+      ul.id="futureIngredients";
+      ul.style.cssText="list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:16px;";
+      const container = document.getElementById("futureNeeds").parentElement;
+      container.appendChild(label);
+      container.appendChild(ul);
+      ioSection = ul;
+    }
+    ioSection.innerHTML="";
+    (parsed.trending_ingredients||parsed.ingredient_opportunities||[]).forEach(i=>{ioSection.innerHTML+=`<li style="font-size:12px;line-height:1.55;font-weight:300;color:rgba(255,255,255,.75);display:flex;gap:8px;align-items:flex-start;"><span style="width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.3);margin-top:6px;flex-shrink:0;"></span><span>${i}</span></li>`;});
+    document.getElementById("futureCityAmplifier").style.display="none";
+    document.getElementById("futureOpportunity").textContent=parsed.himalaya_pairing||parsed.himalaya_opportunity||"";
+    document.querySelector("#futureOpportunity").previousElementSibling.textContent="Himalaya natural pairing";
+    // Confidence note
+    let cnEl = document.getElementById("futureConfidence");
+    if(!cnEl){
+      const cnLabel = document.createElement("div");
+      cnLabel.style.cssText="font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);margin-bottom:5px;font-weight:500;margin-top:14px;";
+      cnLabel.textContent="Confidence note";
+      cnEl = document.createElement("p");
+      cnEl.id="futureConfidence";
+      cnEl.style.cssText="font-size:11px;color:rgba(255,255,255,.6);line-height:1.6;font-style:italic;font-weight:300;";
+      document.getElementById("futureOpportunity").parentElement.appendChild(cnLabel);
+      document.getElementById("futureOpportunity").parentElement.appendChild(cnEl);
+    }
+    if(cnEl){cnEl.style.display="none";if(cnEl.previousElementSibling)cnEl.previousElementSibling.style.display="none";}
+    document.getElementById("futureResults").style.display="block";
+    document.getElementById("futureResults").scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(err){
+    document.getElementById("futureError").textContent="Error: "+err.message;
+    document.getElementById("futureError").style.display="block";
+  }finally{
+    document.getElementById("futureLoading").style.display="none";
+    btn.disabled=false;
+  }
+}
+</script>
+</body>
+</html>
