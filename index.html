@@ -63,7 +63,7 @@ textarea::placeholder{color:#A8B5AC}
 .card-sec-age{font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px;font-weight:500;opacity:.7}
 .card-primary .card-sec-age{color:rgba(255,255,255,.7)}
 .card-secondary .card-sec-age{color:var(--text-light)}
-.card-tam{font-size:10px;margin-bottom:18px;font-weight:400;opacity:.6}
+.card-tam{font-size:10px;margin-bottom:18px;font-weight:400;opacity:.6} .card-tam{display:none}
 .card-primary .card-tam{color:rgba(255,255,255,.8)}
 .card-secondary .card-tam{color:var(--text-light)}
 .card-divider{height:1px;margin-bottom:16px}
@@ -898,9 +898,10 @@ async function analyseProduct(){
 
 function renderResults(input,data){
   document.getElementById("resultProduct").textContent=input.length>100?input.slice(0,100)+"...":input;
-  const pName = data.primary.sub_segment ? data.primary.cohort + " — " + data.primary.sub_segment : data.primary.cohort;
+  const hideSub = c => /beauty\s*elites/i.test(c || "");
+  const pName = (data.primary.sub_segment && !hideSub(data.primary.cohort)) ? data.primary.cohort + " — " + data.primary.sub_segment : data.primary.cohort;
+  const sName = (expData.sub_segment && !hideSub(expData.cohort)) ? expData.cohort + " — " + expData.sub_segment : (expData.cohort || "-");
   const expData = (data && (data.experimental_target || data.secondary)) || {};
-  const sName = expData.sub_segment ? expData.cohort + " — " + expData.sub_segment : (expData.cohort || "-");
   document.getElementById("primaryName").textContent=pName;
   document.getElementById("primarySecAge").textContent=data.primary.sec_age;
   document.getElementById("primaryTam").textContent="Market value "+data.primary.tam;
