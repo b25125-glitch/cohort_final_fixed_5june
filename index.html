@@ -898,10 +898,10 @@ async function analyseProduct(){
 
 function renderResults(input,data){
   document.getElementById("resultProduct").textContent=input.length>100?input.slice(0,100)+"...":input;
+  const expData = (data && (data.experimental_target || data.secondary)) || {};
   const hideSub = c => /beauty\s*elites/i.test(c || "");
   const pName = (data.primary.sub_segment && !hideSub(data.primary.cohort)) ? data.primary.cohort + " — " + data.primary.sub_segment : data.primary.cohort;
   const sName = (expData.sub_segment && !hideSub(expData.cohort)) ? expData.cohort + " — " + expData.sub_segment : (expData.cohort || "-");
-  const expData = (data && (data.experimental_target || data.secondary)) || {};
   document.getElementById("primaryName").textContent=pName;
   document.getElementById("primarySecAge").textContent=data.primary.sec_age;
   document.getElementById("primaryTam").textContent="Market value "+data.primary.tam;
